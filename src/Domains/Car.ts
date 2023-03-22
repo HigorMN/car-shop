@@ -11,6 +11,7 @@ class Car {
   protected id?: string;
 
   constructor(car: ICar) {
+    this.id = car.id;
     this.model = car.model;
     this.year = car.year;
     this.color = car.color;
@@ -18,7 +19,6 @@ class Car {
     this.buyValue = car.buyValue;
     this.doorsQty = car.doorsQty;
     this.seatsQty = car.seatsQty;
-    this.id = car.id;
   }
 }
 
