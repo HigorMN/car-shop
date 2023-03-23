@@ -33,6 +33,22 @@ class MotorcycleController {
       this.next(error);
     }
   }
+
+  public async getAll(): Promise<Response> {
+    const { status, message } = await this.service.getAll();
+    return this.res.status(status).json(message);
+  }
+
+  public async getById() {
+    const { id } = this.req.params;
+
+    try {
+      const { status, message } = await this.service.getById(id);
+      return this.res.status(status).json(message);
+    } catch (error) {
+      this.next(error);
+    }
+  }
 }
 
 export default MotorcycleController;
