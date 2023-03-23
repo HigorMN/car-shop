@@ -27,27 +27,24 @@ class CarController {
     };
 
     try {
-      const newCar = await this.service.register(car);
-      return this.res.status(201).json(newCar);
+      const { status, message } = await this.service.register(car);
+      return this.res.status(status).json(message);
     } catch (error) {
       this.next(error);
     }
   }
 
   public async getAll(): Promise<Response> {
-    const cars = await this.service.getAll();
-    return this.res.status(200).json(cars);
+    const { status, message } = await this.service.getAll();
+    return this.res.status(status).json(message);
   }
 
   public async getById() {
     const { id } = this.req.params;
 
     try {
-      const car = await this.service.getById(id);
-      if (car.status) {
-        return this.res.status(car.status).json({ message: car.message });
-      }
-      return this.res.status(200).json(car.car);
+      const { status, message } = await this.service.getById(id);
+      return this.res.status(status).json(message);
     } catch (error) {
       this.next(error);
     }
