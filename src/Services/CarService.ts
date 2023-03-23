@@ -18,7 +18,7 @@ class CarService {
 
   public async register(car: ICar): Promise<IResponse> {
     const newCar = await this.carODM.create(car);
-    return response(200, this.createCarDomain(newCar));
+    return response(201, this.createCarDomain(newCar));
   }
 
   public async getAll(): Promise<IResponse> {
