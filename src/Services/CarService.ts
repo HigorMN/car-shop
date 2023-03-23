@@ -1,3 +1,4 @@
+import { isValidObjectId } from 'mongoose';
 import Car from '../Domains/Car';
 import ICar from '../Interfaces/ICar';
 import IResponse from '../Interfaces/IResponse';
@@ -35,6 +36,16 @@ class CarService {
     } catch (error) {
       return responseErro(422, 'Invalid mongo id');
     }
+  }
+
+  public async updateById(id: string, obj: Partial<ICar>): Promise<IResponse> {
+    if (!isValidObjectId(id)) return responseErro(422, 'Invalid mongo id');
+
+    const car = await this.carODM.findById(id);
+    if (!car) return responseErro(404, 'Car not found');
+
+    const updateCar = await this.carODM.update(id, obj);
+    return response(200, this.createCarDomain(updateCar));
   }
 }
 
