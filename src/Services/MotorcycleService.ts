@@ -1,3 +1,4 @@
+import { isValidObjectId } from 'mongoose';
 import Motorcycle from '../Domains/Motorcycle';
 import IMotorcycle from '../Interfaces/IMotorcycle';
 import IResponse from '../Interfaces/IResponse';
@@ -35,6 +36,16 @@ class MotorcycleService {
     } catch (error) {
       return responseErro(422, 'Invalid mongo id');
     }
+  }
+
+  public async updateById(id: string, obj: Partial<IMotorcycle>): Promise<IResponse> {
+    if (!isValidObjectId(id)) return responseErro(422, 'Invalid mongo id');
+
+    const motorcyle = await this.motorcycleODM.findById(id);
+    if (!motorcyle) return responseErro(404, 'Motorcycle not found');
+
+    const updateMotorcycle = await this.motorcycleODM.update(id, obj);
+    return response(200, this.createMotorcycleDomain(updateMotorcycle));
   }
 }
 
