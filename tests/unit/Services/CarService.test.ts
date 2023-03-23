@@ -43,21 +43,37 @@ describe('Deve validar o serviço de carro', function () {
   });
 
   it('Deve retornar um erro caso não encontre um carro pelo id', async function () {
-    Sinon.stub(Model, 'findById').resolves(null);
+    Sinon.stub(Model, 'findById').onFirstCall().resolves(null).onSecondCall()
+      .resolves(null);
 
     const service = new CarService();
     const result = await service.getById('641c76e60e5ba3e1fc849544');
+    const result2 = await service.updateById('641c76e60e5ba3e1fc849544', carInput);
 
     expect(result).to.be.deep.equal(responseErro(404, 'Car not found'));
+    expect(result2).to.be.deep.equal(responseErro(404, 'Car not found'));
   });
 
   it('Deve retornar um erro caso id sejá invalido', async function () {
-    Sinon.stub(Model, 'findById').resolves(null);
+    Sinon.stub(Model, 'findById').onFirstCall().resolves(null).onSecondCall()
+      .resolves(null);
 
     const service = new CarService();
     const result = await service.getById('idInválido');
+    const result2 = await service.updateById('idInválido', carInput);
 
     expect(result).to.be.deep.equal(responseErro(422, 'Invalid mongo id'));
+    expect(result2).to.be.deep.equal(responseErro(422, 'Invalid mongo id'));
+  });
+
+  it('Deve atualizar e retornar um carro pelo id com sucesso', async function () {
+    Sinon.stub(Model, 'findById').resolves(carOutput);
+    Sinon.stub(Model, 'findByIdAndUpdate').resolves(carOutput);
+
+    const service = new CarService();
+    const result = await service.updateById('641c76e60e5ba3e1fc849567', carInput);
+
+    expect(result).to.be.deep.equal(response(200, carOutput));
   });
 
   afterEach(function () {
